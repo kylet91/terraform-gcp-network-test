@@ -1,9 +1,12 @@
+data "google_compute_regions" "available" {
+}
+
 resource "google_compute_instance" "premium" {
-  for_each = var.regions
+  for_each = toset(data.google_compute_regions.available.names)
   name    = "${each.key}-premium"
   machine_type = "f1-micro"
   tags         = ["terraform"]
-  zone            = "${each.key}-a"
+  zone            = "${each.key}-b"
 
   boot_disk {
     initialize_params {
@@ -25,11 +28,11 @@ resource "google_compute_instance" "premium" {
 }
 
 resource "google_compute_instance" "standard" {
-  for_each = var.regions
+  for_each = toset(data.google_compute_regions.available.names)
   name    = "${each.key}-standard"
   machine_type = "f1-micro"
   tags         = ["terraform"]
-  zone            = "${each.key}-a"
+  zone            = "${each.key}-b"
 
   boot_disk {
     initialize_params {
